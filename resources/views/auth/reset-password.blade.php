@@ -10,7 +10,7 @@
                 <div class="text-center mb-4">
                     <div class="logo mx-auto" style="width: 60px; height: 60px; font-size: 2rem;">L</div>
                     <h3 class="mt-3 fw-bold">Set New Password</h3>
-                    <p class="text-muted small">Choose a strong password</p>
+                    <p class=" small">Choose a strong password</p>
                 </div>
 
                 <form method="POST" action="{{ route('password.update') }}">

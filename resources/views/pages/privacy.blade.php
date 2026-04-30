@@ -11,7 +11,7 @@
                 <i class="fas fa-lock me-2"></i>Privacy
             </div>
             <h1 class="display-4 fw-bold mb-3">Privacy Policy</h1>
-            <p class="lead text-muted">Last updated: March 2025</p>
+            <p class="lead ">Last updated: March 2025</p>
         </div>
     </div>
 
@@ -143,7 +143,7 @@
                 </section>
 
                 <hr class="my-5">
-                <p class="text-muted small">This Privacy Policy was last updated on March 1, 2025.</p>
+                <p class=" small">This Privacy Policy was last updated on March 1, 2025.</p>
             </div>
         </div>
     </div>
@@ -179,7 +179,7 @@
         background-color: var(--brand);
         color: #0f172a;
     }
-    body.dark-mode .text-muted {
+    body.dark-mode . {
         color: #cbd5e1 !important;
     }
     body.dark-mode ul li {

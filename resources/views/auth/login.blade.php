@@ -12,7 +12,7 @@
                 <div class="text-center mb-4">
                     <div class="logo mx-auto" style="width: 60px; height: 60px; font-size: 2rem;">L</div>
                     <h3 class="mt-3 fw-bold">Welcome Back</h3>
-                    <p class="text-muted small">Sign in to continue to Lifeline</p>
+                    <p class=" small">Sign in to continue to Lifeline</p>
                 </div>
 
                 <!-- Status messages from verification -->
@@ -90,7 +90,7 @@
             </div>
 
             <!-- Extra info / trust badge -->
-            <p class="text-center text-muted small mt-4">
+            <p class="text-center  small mt-4">
                 <i class="fas fa-shield-alt me-1"></i> Protected by enterprise-grade security
             </p>
         </div>

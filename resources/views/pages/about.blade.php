@@ -11,7 +11,7 @@
                 <i class="fas fa-heartbeat me-2"></i>Our Mission
             </div>
             <h1 class="display-4 fw-bold mb-3">Democratizing Medical Imaging <span style="color: var(--brand);">with AI</span></h1>
-            <p class="lead text-muted">We believe every clinician, regardless of location, should have access to intelligent tools that enhance diagnostic accuracy and speed.</p>
+            <p class="lead ">We believe every clinician, regardless of location, should have access to intelligent tools that enhance diagnostic accuracy and speed.</p>
         </div>
     </div>
 
@@ -19,8 +19,8 @@
     <div class="row align-items-center g-5 py-4">
         <div class="col-lg-6">
             <h2 class="fw-bold mb-3">Our Story</h2>
-            <p class="text-muted">Founded in 2025 by a team of radiologists, engineers, and AI researchers, Lifeline was born from a simple observation: many healthcare facilities lack immediate access to expert radiologists. Meanwhile, AI models had reached a level where they could provide meaningful preliminary insights.</p>
-            <p class="text-muted">We partnered with teaching hospitals in Nigeria to fine‑tune Med‑Gemma on local data, ensuring the model understands diverse pathologies and image qualities. Today, Lifeline is used by clinics across West Africa, reducing report turnaround times and helping doctors make faster decisions.</p>
+            <p class="">Founded in 2025 by a team of radiologists, engineers, and AI researchers, Lifeline was born from a simple observation: many healthcare facilities lack immediate access to expert radiologists. Meanwhile, AI models had reached a level where they could provide meaningful preliminary insights.</p>
+            <p class="">We partnered with teaching hospitals in Nigeria to fine‑tune Med‑Gemma on local data, ensuring the model understands diverse pathologies and image qualities. Today, Lifeline is used by clinics across West Africa, reducing report turnaround times and helping doctors make faster decisions.</p>
             <div class="mt-4">
                 <div class="d-flex align-items-center gap-3">
                     <div>
@@ -28,7 +28,7 @@
                     </div>
                     <div>
                         <strong>Headquarters</strong><br>
-                        <span class="text-muted">Lagos, Nigeria</span>
+                        <span class="">Lagos, Nigeria</span>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                     <i class="fas fa-hand-holding-heart fa-3x" style="color: var(--brand);"></i>
                 </div>
                 <h5>Patient First</h5>
-                <p class="text-muted">Every line of code is written with the patient's well‑being in mind. We prioritize safety and accuracy.</p>
+                <p class="">Every line of code is written with the patient's well‑being in mind. We prioritize safety and accuracy.</p>
             </div>
         </div>
         <div class="col-md-4 mb-4">
@@ -56,7 +56,7 @@
                     <i class="fas fa-flask fa-3x" style="color: var(--brand);"></i>
                 </div>
                 <h5>Continuous Innovation</h5>
-                <p class="text-muted">We partner with researchers to keep our models at the forefront of medical AI.</p>
+                <p class="">We partner with researchers to keep our models at the forefront of medical AI.</p>
             </div>
         </div>
         <div class="col-md-4 mb-4">
@@ -65,7 +65,7 @@
                     <i class="fas fa-lock fa-3x" style="color: var(--brand);"></i>
                 </div>
                 <h5>Privacy by Design</h5>
-                <p class="text-muted">Your data is encrypted and never used for purposes other than analysis without consent.</p>
+                <p class="">Your data is encrypted and never used for purposes other than analysis without consent.</p>
             </div>
         </div>
     </div>
@@ -77,28 +77,28 @@
             <div class="text-center">
                 <img src="https://via.placeholder.com/150" class="rounded-circle img-fluid mb-3" style="width:120px; height:120px; object-fit:cover;">
                 <h6>Dr. Ngozi Okonkwo</h6>
-                <p class="small text-muted">Co‑founder, Chief Radiologist</p>
+                <p class="small ">Co‑founder, Chief Radiologist</p>
             </div>
         </div>
         <div class="col-md-3 col-6 mb-4">
             <div class="text-center">
                 <img src="https://via.placeholder.com/150" class="rounded-circle img-fluid mb-3" style="width:120px; height:120px; object-fit:cover;">
                 <h6>Chidi Eze</h6>
-                <p class="small text-muted">Co‑founder, Lead AI Engineer</p>
+                <p class="small ">Co‑founder, Lead AI Engineer</p>
             </div>
         </div>
         <div class="col-md-3 col-6 mb-4">
             <div class="text-center">
                 <img src="https://via.placeholder.com/150" class="rounded-circle img-fluid mb-3" style="width:120px; height:120px; object-fit:cover;">
                 <h6>Adaobi Okafor</h6>
-                <p class="small text-muted">Product Manager</p>
+                <p class="small ">Product Manager</p>
             </div>
         </div>
         <div class="col-md-3 col-6 mb-4">
             <div class="text-center">
                 <img src="https://via.placeholder.com/150" class="rounded-circle img-fluid mb-3" style="width:120px; height:120px; object-fit:cover;">
                 <h6>Dr. Adebayo Sanni</h6>
-                <p class="small text-muted">Clinical Advisor</p>
+                <p class="small ">Clinical Advisor</p>
             </div>
         </div>
     </div>
@@ -107,19 +107,19 @@
     <div class="row text-center py-5">
         <div class="col-md-3 col-6 mb-4">
             <div class="display-4 fw-bold" style="color: var(--brand);">20+</div>
-            <p class="text-muted">Hospitals</p>
+            <p class="">Hospitals</p>
         </div>
         <div class="col-md-3 col-6 mb-4">
             <div class="display-4 fw-bold" style="color: var(--brand);">5k+</div>
-            <p class="text-muted">Analyses</p>
+            <p class="">Analyses</p>
         </div>
         <div class="col-md-3 col-6 mb-4">
             <div class="display-4 fw-bold" style="color: var(--brand);">10+</div>
-            <p class="text-muted">Radiologists</p>
+            <p class="">Radiologists</p>
         </div>
         <div class="col-md-3 col-6 mb-4">
             <div class="display-4 fw-bold" style="color: var(--brand);">24/7</div>
-            <p class="text-muted">Support</p>
+            <p class="">Support</p>
         </div>
     </div>
 
@@ -128,7 +128,7 @@
         <div class="col-12 text-center">
             <div class="p-5 rounded-4" style="background: rgba(164,233,252,0.1);">
                 <h3 class="fw-bold">Join us in shaping the future of medical imaging</h3>
-                <p class="lead text-muted">Get started with 10 free analyses – no credit card required.</p>
+                <p class="lead ">Get started with 10 free analyses – no credit card required.</p>
                 <a href="{{ route('register') }}" class="btn btn-brand btn-lg px-5">Sign Up Now</a>
             </div>
         </div>
@@ -149,7 +149,7 @@
     body.dark-mode .bg-white {
         background-color: var(--white) !important;
     }
-    body.dark-mode .text-muted {
+    body.dark-mode . {
         color: #cbd5e1 !important;
     }
     body.dark-mode .card {

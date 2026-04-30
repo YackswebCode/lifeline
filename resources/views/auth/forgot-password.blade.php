@@ -10,7 +10,7 @@
                 <div class="text-center mb-4">
                     <div class="logo mx-auto" style="width: 60px; height: 60px; font-size: 2rem;">L</div>
                     <h3 class="mt-3 fw-bold">Reset Password</h3>
-                    <p class="text-muted small">Enter your email to receive a reset link</p>
+                    <p class=" small">Enter your email to receive a reset link</p>
                 </div>
 
                 @if (session('status'))

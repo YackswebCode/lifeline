@@ -12,7 +12,7 @@
                 <div class="text-center mb-4">
                     <div class="logo mx-auto" style="width: 60px; height: 60px; font-size: 2rem;">L</div>
                     <h3 class="mt-3 fw-bold">Create Your Account</h3>
-                    <p class="text-muted small">Join Lifeline and start using AI‑powered X‑ray analysis</p>
+                    <p class=" small">Join Lifeline and start using AI‑powered X‑ray analysis</p>
                 </div>
 
                 <!-- Registration Form -->
@@ -43,7 +43,7 @@
 
                     <!-- Hospital / Clinic (optional) -->
                     <div class="mb-3">
-                        <label for="organization" class="form-label fw-semibold">Hospital / Clinic <span class="text-muted">(optional)</span></label>
+                        <label for="organization" class="form-label fw-semibold">Hospital / Clinic <span class="">(optional)</span></label>
                         <div class="input-group">
                             <span class="input-group-text bg-transparent border-end-0">
                                 <i class="fas fa-hospital" style="color: var(--brand);"></i>
@@ -99,7 +99,7 @@
             </div>
 
             <!-- Trust badge -->
-            <p class="text-center text-muted small mt-4">
+            <p class="text-center  small mt-4">
                 <i class="fas fa-shield-alt me-1"></i> Your data is encrypted and never shared
             </p>
         </div>

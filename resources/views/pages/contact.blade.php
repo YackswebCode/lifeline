@@ -11,7 +11,7 @@
                 <i class="fas fa-headset me-2"></i>Get in Touch
             </div>
             <h1 class="display-4 fw-bold mb-3">We'd love to hear from you</h1>
-            <p class="lead text-muted">Whether you have a question about our AI, need support, or want to partner with us, our team is ready to help.</p>
+            <p class="lead ">Whether you have a question about our AI, need support, or want to partner with us, our team is ready to help.</p>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
         <!-- Contact Information -->
         <div class="col-lg-5">
             <h2 class="fw-bold mb-4">Contact Information</h2>
-            <p class="text-muted mb-4">Reach out through any of these channels, or use the form. We typically respond within 24 hours.</p>
+            <p class=" mb-4">Reach out through any of these channels, or use the form. We typically respond within 24 hours.</p>
 
             <!-- Info Cards -->
             <div class="d-flex align-items-start mb-4">
@@ -29,7 +29,7 @@
                 <div>
                     <h5 class="fw-semibold">Email</h5>
                     <a href="mailto:support@lifeline.ai" class="text-decoration-none" style="color: var(--brand);">support@lifeline.ai</a><br>
-                    <small class="text-muted">For general inquiries & support</small>
+                    <small class="">For general inquiries & support</small>
                 </div>
             </div>
 
@@ -40,7 +40,7 @@
                 <div>
                     <h5 class="fw-semibold">Phone</h5>
                     <a href="tel:+2348001234567" class="text-decoration-none" style="color: var(--brand);">+234 800 123 4567</a><br>
-                    <small class="text-muted">Monday–Friday, 9am–5pm WAT</small>
+                    <small class="">Monday–Friday, 9am–5pm WAT</small>
                 </div>
             </div>
 
@@ -122,7 +122,7 @@
     <!-- Additional CTA (optional) -->
     <div class="row py-5">
         <div class="col-12 text-center">
-            <p class="text-muted">Prefer email? Write to us at <a href="mailto:support@lifeline.ai" style="color: var(--brand);">support@lifeline.ai</a> and we'll get back to you shortly.</p>
+            <p class="">Prefer email? Write to us at <a href="mailto:support@lifeline.ai" style="color: var(--brand);">support@lifeline.ai</a> and we'll get back to you shortly.</p>
         </div>
     </div>
 </div>
