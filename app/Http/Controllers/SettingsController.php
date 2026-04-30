@@ -13,7 +13,7 @@ class SettingsController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('settings', compact('user'));
+        return view('dashboard.settings', compact('user'));
     }
 
     public function updateProfile(Request $request)

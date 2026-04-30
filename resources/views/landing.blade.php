@@ -20,7 +20,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="position-relative">
-                    <img src="https://via.placeholder.com/600x400?text=X-ray+Analysis" class="img-fluid rounded-4 shadow" alt="X-ray Analysis">
+                  <img src="{{ asset('images/hero.png') }}" class="img-fluid rounded-4 shadow" alt="X-ray Analysis">
                     <div class="position-absolute bottom-0 start-0 translate-middle-y bg-white p-3 rounded-4 shadow-sm d-none d-lg-block" style="left: 10%;">
                         <div class="d-flex align-items-center gap-2">
                             <i class="fas fa-robot fa-2x" style="color: var(--brand);"></i>

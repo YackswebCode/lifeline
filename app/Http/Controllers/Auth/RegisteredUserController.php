@@ -18,28 +18,29 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
-            public function store(Request $request): RedirectResponse
-        {
-            $request->validate([
-                'name'     => ['required', 'string', 'max:255'],
-                'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                'organization' => ['nullable', 'string', 'max:255'],
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                'consent'  => ['required', 'accepted'],
-            ]);
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name'          => ['required', 'string', 'max:255'],
+            'email'         => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'organization'  => ['nullable', 'string', 'max:255'],
+            'password'      => ['required', 'confirmed', Rules\Password::defaults()],
+            'consent'       => ['required', 'accepted'],
+        ]);
 
-            $user = User::create([
-                'name'         => $request->name,
-                'email'        => $request->email,
-                'organization' => $request->organization,
-                'password'     => Hash::make($request->password),
-            ]);
+        $user = User::create([
+            'name'          => $request->name,
+            'email'         => $request->email,
+            'organization'  => $request->organization,
+            'password'      => Hash::make($request->password),
+            'credits'       => 10,   // free credits
+        ]);
 
-            // Send verification email immediately
-            $user->sendEmailVerificationNotification();
+        // Send verification email immediately
+        $user->sendEmailVerificationNotification();
 
-            // Store email in session for the verification page
-            return redirect()->route('verification.notice')
-                            ->with('registered_email', $user->email);
-        }
+        // Store email in session for the verification page
+        return redirect()->route('verification.notice')
+                        ->with('registered_email', $user->email);
+    }
 }

@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
     <style>
         :root {
             --brand: #a4e9fc;
@@ -287,7 +290,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link {{ request()->routeIs('analyze') ? 'active' : '' }}">
+                        <a href="{{ route('analyze.index') }}" class="nav-link {{ request()->routeIs('analyze.index') ? 'active' : '' }}">
                             <i class="fas fa-upload"></i> Analyze
                         </a>
                     </li>
@@ -298,11 +301,6 @@
                     </li>
                     <li class="nav-item mt-4">
                         <hr>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('landing') }}" class="nav-link">
-                            <i class="fas fa-home"></i> Home
-                        </a>
                     </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -341,6 +339,11 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Dark mode script -->
+     <!-- jQuery (required for DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
         (function() {
             // Dark mode
