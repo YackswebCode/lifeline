@@ -8,7 +8,12 @@
         <div class="col-md-8 col-lg-6 col-xl-5">
             <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5">
                 <div class="text-center mb-4">
-                    <div class="logo mx-auto" style="width: 60px; height: 60px; font-size: 2rem;">L</div>
+                    <img 
+                    id="siteLogo"
+                    src="{{ asset('images/logo_light.png') }}" 
+                    alt="Lifeline Logo" 
+                    style="width:80px;height:80px;object-fit:contain;"
+                    >
                     <h3 class="mt-3 fw-bold">Reset Password</h3>
                     <p class=" small">Enter your email to receive a reset link</p>
                 </div>

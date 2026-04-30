@@ -10,7 +10,12 @@
             <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5">
                 <!-- Brand icon / logo at the top -->
                 <div class="text-center mb-4">
-                    <div class="logo mx-auto" style="width: 60px; height: 60px; font-size: 2rem;">L</div>
+                    <img 
+                    id="siteLogo"
+                    src="{{ asset('images/logo_light.png') }}" 
+                    alt="Lifeline Logo" 
+                    style="width:80px;height:80px;object-fit:contain;"
+                    >
                     <h3 class="mt-3 fw-bold">Welcome Back</h3>
                     <p class=" small">Sign in to continue to Lifeline</p>
                 </div>
