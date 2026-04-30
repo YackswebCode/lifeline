@@ -8,15 +8,14 @@
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <span class="badge bg-brand-soft text-dark mb-3">AI-Powered Medical Imaging</span>
+                <span class="badge bg-brand-soft mb-3">AI-Powered Medical Imaging</span>
                 <h1 class="display-4 fw-bold lh-1 mb-3">Your Health, <span style="color: var(--brand);">Our AI</span></h1>
-                <p class="lead text-muted">Accurate, Fast, Reliable</p>
+                <p class="lead ">Accurate, Fast, Reliable</p>
                 <p class="mt-4">Upload chest X‑rays and get instant AI‑powered insights to assist clinicians. Secure, private, and always improving.</p>
                 <div class="d-flex flex-wrap gap-3 mt-4">
-                    <a href="{{ route('register') }}" class="btn btn-brand btn-lg px-4">Start Free Trial</a>
-                    <a href="" class="btn btn-outline-secondary btn-lg px-4">Try Demo</a>
+                    <a href="{{ route('register') }}" class="btn btn-brand btn-lg px-4">Try It Out !</a>
                 </div>
-                <p class="mt-3 text-muted"><i class="fas fa-check-circle text-brand me-2"></i>No credit card required · 10 free analyses</p>
+                <p class="mt-3 "><i class="fas fa-check-circle text-brand me-2"></i>No credit card required · 10 free analyses</p>
             </div>
             <div class="col-lg-6">
                 <div class="position-relative">
@@ -43,7 +42,7 @@
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold">Why Healthcare Professionals Choose Lifeline</h2>
-            <p class="lead text-muted">Powered by cutting-edge AI, designed for clinical workflows.</p>
+            <p class="lead ">Powered by cutting-edge AI, designed for clinical workflows.</p>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
@@ -53,7 +52,7 @@
                             <i class="fas fa-bolt fa-3x" style="color: var(--brand);"></i>
                         </div>
                         <h5 class="fw-bold">Lightning Fast</h5>
-                        <p class="text-muted">Results in seconds, so you can focus on patient care.</p>
+                        <p class="">Results in seconds, so you can focus on patient care.</p>
                     </div>
                 </div>
             </div>
@@ -64,7 +63,7 @@
                             <i class="fas fa-shield-alt fa-3x" style="color: var(--brand);"></i>
                         </div>
                         <h5 class="fw-bold">HIPAA‑Ready</h5>
-                        <p class="text-muted">Enterprise‑grade security and privacy by design.</p>
+                        <p class="">Enterprise‑grade security and privacy by design.</p>
                     </div>
                 </div>
             </div>
@@ -75,7 +74,7 @@
                             <i class="fas fa-microscope fa-3x" style="color: var(--brand);"></i>
                         </div>
                         <h5 class="fw-bold">Med‑Gemma Powered</h5>
-                        <p class="text-muted">State‑of‑the‑art model fine‑tuned for radiology.</p>
+                        <p class="">State‑of‑the‑art model fine‑tuned for radiology.</p>
                     </div>
                 </div>
             </div>
@@ -88,7 +87,7 @@
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold">How It Works</h2>
-            <p class="lead text-muted">Simple, intuitive, and powerful.</p>
+            <p class="lead ">Simple, intuitive, and powerful.</p>
         </div>
         <div class="row g-4">
             <div class="col-md-3">
@@ -99,7 +98,7 @@
                             <i class="fas fa-cloud-upload-alt fa-3x" style="color: var(--brand);"></i>
                         </div>
                         <h5>Upload X‑ray</h5>
-                        <p class="text-muted small">Drag & drop or select a chest X‑ray image.</p>
+                        <p class=" small">Drag & drop or select a chest X‑ray image.</p>
                     </div>
                 </div>
             </div>
@@ -111,7 +110,7 @@
                             <i class="fas fa-brain fa-3x" style="color: var(--brand);"></i>
                         </div>
                         <h5>AI Analyzes</h5>
-                        <p class="text-muted small">Our model processes the image and identifies findings.</p>
+                        <p class=" small">Our model processes the image and identifies findings.</p>
                     </div>
                 </div>
             </div>
@@ -123,7 +122,7 @@
                             <i class="fas fa-file-medical fa-3x" style="color: var(--brand);"></i>
                         </div>
                         <h5>Get Structured Report</h5>
-                        <p class="text-muted small">Receive findings, impression, and confidence score.</p>
+                        <p class=" small">Receive findings, impression, and confidence score.</p>
                     </div>
                 </div>
             </div>
@@ -135,7 +134,7 @@
                             <i class="fas fa-stethoscope fa-3x" style="color: var(--brand);"></i>
                         </div>
                         <h5>Consult & Decide</h5>
-                        <p class="text-muted small">Use insights to support your clinical judgment.</p>
+                        <p class=" small">Use insights to support your clinical judgment.</p>
                     </div>
                 </div>
             </div>
@@ -148,7 +147,7 @@
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold">Trusted by healthcare professionals</h2>
-            <p class="lead text-muted">Join hundreds of clinicians across Nigeria.</p>
+            <p class="lead ">Join hundreds of clinicians across Nigeria.</p>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
@@ -166,7 +165,7 @@
                             <i class="fas fa-user-circle fa-3x me-3" style="color: var(--brand);"></i>
                             <div>
                                 <strong>Dr. Ngozi</strong>
-                                <p class="text-muted small mb-0">Radiologist, Lagos</p>
+                                <p class=" small mb-0">Radiologist, Lagos</p>
                             </div>
                         </div>
                     </div>
@@ -187,7 +186,7 @@
                             <i class="fas fa-user-circle fa-3x me-3" style="color: var(--brand);"></i>
                             <div>
                                 <strong>Dr. Ade</strong>
-                                <p class="text-muted small mb-0">General Practitioner, Abuja</p>
+                                <p class=" small mb-0">General Practitioner, Abuja</p>
                             </div>
                         </div>
                     </div>
@@ -208,7 +207,7 @@
                             <i class="fas fa-user-circle fa-3x me-3" style="color: var(--brand);"></i>
                             <div>
                                 <strong>Dr. Chidi</strong>
-                                <p class="text-muted small mb-0">Emergency Medicine, Enugu</p>
+                                <p class=" small mb-0">Emergency Medicine, Enugu</p>
                             </div>
                         </div>
                     </div>

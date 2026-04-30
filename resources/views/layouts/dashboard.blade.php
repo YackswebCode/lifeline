@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-
+    <link id="favicon" rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
     <style>
         :root {
             --brand: #a4e9fc;
@@ -277,10 +277,15 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="d-flex align-items-center gap-2">
-                    <div class="logo">L</div>
+                    <img 
+                        id="sidebarLogo"
+                        src="{{ asset('images/logo_light.png') }}" 
+                        alt="Lifeline Logo"
+                        style="width:80px;height:80px;object-fit:contain;"
+                    >
                     <span class="fw-bold fs-5">Lifeline</span>
                 </div>
-                <button class="d-md-none btn-close" id="closeSidebar"></button>
+                <button class="d-md-none btn-close" id="closeSidebar" aria-label="Close sidebar"></button>
             </div>
             <nav class="mt-4">
                 <ul class="nav flex-column">
@@ -302,14 +307,14 @@
                     <li class="nav-item mt-4">
                         <hr>
                     </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </li>
                 </ul>
             </nav>
         </aside>
@@ -325,9 +330,6 @@
                     <button class="dark-mode-toggle" id="darkModeToggle">
                         <i class="fas fa-moon"></i>
                     </button>
-                    <div class="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
                 </div>
             </div>
 
@@ -338,74 +340,164 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Dark mode script -->
-     <!-- jQuery (required for DataTables) -->
+    <!-- jQuery (required for DataTables) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <!-- DataTables JS -->
+    <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    
     <script>
-        (function() {
-            // Dark mode
-            const toggle = document.getElementById('darkModeToggle');
-            const icon = toggle.querySelector('i');
-            const body = document.body;
-            const savedMode = localStorage.getItem('darkMode');
-            if (savedMode === 'enabled') {
-                body.classList.add('dark-mode');
+    (function() {
+        // ---------- DARK MODE LOGIC (unchanged, but integrated) ----------
+        const toggle = document.getElementById('darkModeToggle');
+        const icon = toggle.querySelector('i');
+        const body = document.body;
+        const logo = document.getElementById('sidebarLogo');
+        const favicon = document.getElementById('favicon');
+        const lightLogo = "{{ asset('images/logo_light.png') }}";
+        const darkLogo = "{{ asset('images/logo_dark.png') }}";
+        const lightIcon = "{{ asset('images/favicon.png') }}";
+        const darkIcon = "{{ asset('images/favicon.png') }}";
+
+        function setTheme(isDark) {
+            if (logo) {
+                logo.src = isDark ? darkLogo : lightLogo;
+            }
+            if (favicon) {
+                favicon.href = isDark ? darkIcon : lightIcon;
+            }
+        }
+
+        const savedMode = localStorage.getItem('darkMode');
+        if (savedMode === 'enabled') {
+            body.classList.add('dark-mode');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+            setTheme(true);
+        } else {
+            setTheme(false);
+        }
+
+        toggle.addEventListener('click', () => {
+            const isDark = body.classList.toggle('dark-mode');
+            if (isDark) {
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('darkMode', 'disabled');
             }
-            toggle.addEventListener('click', () => {
-                if (body.classList.contains('dark-mode')) {
-                    body.classList.remove('dark-mode');
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                    localStorage.setItem('darkMode', 'disabled');
-                } else {
-                    body.classList.add('dark-mode');
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    localStorage.setItem('darkMode', 'enabled');
-                }
-            });
+            setTheme(isDark);
+        });
 
-            // Sidebar toggle for mobile with backdrop
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const closeSidebar = document.getElementById('closeSidebar');
-            const backdrop = document.getElementById('sidebarBackdrop');
-
-            function openSidebar() {
-                sidebar.classList.add('show');
-                backdrop.classList.add('show');
-                document.body.style.overflow = 'hidden'; // prevent background scrolling
+        // ---------- MOBILE SIDEBAR TOGGLE FIX ----------
+        // Get DOM elements
+        const sidebar = document.getElementById('sidebar');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+        const sidebarToggleBtn = document.getElementById('sidebarToggle');
+        const closeSidebarBtn = document.getElementById('closeSidebar');
+        const mainContent = document.getElementById('mainContent');
+        
+        // Helper functions to open/close sidebar on mobile
+        function openSidebar() {
+            if (!sidebar) return;
+            sidebar.classList.add('show');
+            if (sidebarBackdrop) sidebarBackdrop.classList.add('show');
+            // Prevent body scrolling when sidebar is open on mobile (optional but better UX)
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeSidebar() {
+            if (!sidebar) return;
+            sidebar.classList.remove('show');
+            if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
+            // Restore body scrolling
+            document.body.style.overflow = '';
+        }
+        
+        // Toggle sidebar: open if closed, close if open
+        function toggleSidebar() {
+            if (!sidebar) return;
+            if (sidebar.classList.contains('show')) {
+                closeSidebar();
+            } else {
+                openSidebar();
             }
-
-            function closeSidebarFunc() {
-                sidebar.classList.remove('show');
-                backdrop.classList.remove('show');
+        }
+        
+        // Event listeners for mobile sidebar controls
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.addEventListener('click', toggleSidebar);
+        }
+        
+        if (closeSidebarBtn) {
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+        }
+        
+        if (sidebarBackdrop) {
+            sidebarBackdrop.addEventListener('click', closeSidebar);
+        }
+        
+        // Auto-close sidebar on window resize if moving from mobile to desktop (>768px)
+        function handleResize() {
+            const isDesktop = window.innerWidth > 768;
+            if (isDesktop && sidebar && sidebar.classList.contains('show')) {
+                // If on desktop and sidebar is forced open (shouldn't happen), close it and remove inline overrides
+                closeSidebar();
+            }
+            // On desktop, ensure backdrop is hidden and body overflow is reset (just in case)
+            if (isDesktop) {
+                if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
                 document.body.style.overflow = '';
             }
-
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', openSidebar);
-            }
-            if (closeSidebar) {
-                closeSidebar.addEventListener('click', closeSidebarFunc);
-            }
-            if (backdrop) {
-                backdrop.addEventListener('click', closeSidebarFunc);
-            }
-
-            // Close sidebar on window resize if open (e.g., rotate from mobile to desktop)
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768 && sidebar.classList.contains('show')) {
-                    closeSidebarFunc();
-                }
+        }
+        
+        window.addEventListener('resize', handleResize);
+        // Initialize on load: make sure any leftover 'show' class is removed on desktop
+        handleResize();
+        
+        // IMPROVEMENT: Close sidebar automatically after clicking any nav link on mobile (better UX)
+        const navLinks = document.querySelectorAll('.sidebar .nav-link');
+        if (navLinks.length) {
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    // Only auto-close on mobile view (width <= 768) and if sidebar is open
+                    if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('show')) {
+                        // Slight delay to allow the click to navigate (no race condition)
+                        setTimeout(() => {
+                            closeSidebar();
+                        }, 50);
+                    }
+                });
             });
-        })();
+        }
+        
+        // Edge cases: touch events on backdrop are already covered; ensure that if user clicks outside sidebar content but inside backdrop it closes.
+        // Also, ensure that if user opens sidebar and presses browser back? Not needed.
+        
+        // Additional fix: Escape key closes sidebar when open (accessibility)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar && sidebar.classList.contains('show')) {
+                closeSidebar();
+            }
+        });
+        
+        // Make sure main content doesn't have conflicting styles when sidebar toggles on mobile
+        // No additional style needed as CSS handles margin-left via .sidebar.show + main-content margin already set via media query.
+        // However, on mobile main-content margin-left is zero, so no shift.
+        
+        // Debug: ensure that initial state is correct - if JS loads and window is mobile, sidebar starts hidden (no 'show' class)
+        // Ensure that backdrop is hidden initially
+        if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
+        if (sidebar) sidebar.classList.remove('show');
+        document.body.style.overflow = '';
+        
+        // Also handle potential touchstart interference? Not needed.
+    })();
     </script>
+    
     @stack('scripts')
 </body>
 </html>

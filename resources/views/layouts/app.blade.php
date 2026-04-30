@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
     <style>
         :root {
             --brand: #a4e9fc;
@@ -132,6 +133,39 @@
             background-color: rgba(164,233,252,0.2);
         }
 
+        .custom-toggler {
+    border: 2px solid #7bcde0;
+    border-radius: 8px;
+}
+
+    /* Change hamburger icon color */
+    .custom-toggler .navbar-toggler-icon {
+        background-image: none;
+        position: relative;
+        width: 24px;
+        height: 2px;
+        background-color: #7bcde0;
+        display: inline-block;
+    }
+
+    .custom-toggler .navbar-toggler-icon::before,
+    .custom-toggler .navbar-toggler-icon::after {
+        content: "";
+        position: absolute;
+        width: 24px;
+        height: 2px;
+        background-color: #7bcde0;
+        left: 0;
+    }
+
+    .custom-toggler .navbar-toggler-icon::before {
+        top: -7px;
+    }
+
+    .custom-toggler .navbar-toggler-icon::after {
+        top: 7px;
+    }
+
         main {
             min-height: 70vh;
         }
@@ -199,12 +233,16 @@
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('landing') }}">
-                <div class="logo">L</div>
-                <span class="fw-bold">Lifeline</span>
+                <img 
+                    id="siteLogo"
+                    src="{{ asset('images/logo_light.png') }}" 
+                    alt="Lifeline Logo" 
+                    style="width:80px;height:80px;object-fit:contain;"
+                >
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+          <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <!-- Public: Home always visible -->
@@ -297,10 +335,15 @@
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <div class="logo" style="width: 35px; height: 35px; font-size: 1.1rem;">L</div>
-                        <span class="fw-bold fs-5">Lifeline</span>
+                          <img 
+                                id="siteLogo"
+                                src="{{ asset('images/logo_light.png') }}" 
+                                alt="Lifeline Logo" 
+                                style="width:80px;height:80px;object-fit:contain;"
+                            >
+                      
                     </div>
-                    <p class="text-muted small">Your Health, Our AI – Accurate, Fast, Reliable.</p>
+                    <p class=" small">Your Health, Our AI – Accurate, Fast, Reliable.</p>
                     <div class="social-icons">
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
@@ -321,7 +364,7 @@
                 @else
                 <div class="col-md-2 mb-4">
                     <h6 class="fw-bold">Product</h6>
-                    <p class="text-muted small"><a href="{{ route('login') }}">Log in</a> to access AI tools.</p>
+                    <p class=" small"><a href="{{ route('login') }}">Log in</a> to access AI tools.</p>
                 </div>
                 @endif
 
@@ -336,7 +379,7 @@
 
                 <div class="col-md-4 mb-4">
                     <h6 class="fw-bold">Subscribe</h6>
-                    <p class="text-muted small">Get updates on new features and AI advancements.</p>
+                    <p class=" small">Get updates on new features and AI advancements.</p>
                     <form class="d-flex">
                         <input type="email" class="form-control me-2" placeholder="Your email">
                         <button class="btn btn-brand" type="submit"><i class="fas fa-paper-plane"></i></button>
@@ -345,7 +388,7 @@
             </div>
             <hr class="my-4">
             <div class="row">
-                <div class="col text-center text-muted small">
+                <div class="col text-center  small">
                     &copy; {{ date('Y') }} Lifeline. All rights reserved. 
                     <a href="{{ route('terms') }}">Terms</a> | 
                     <a href="{{ route('privacy') }}">Privacy</a> | 
@@ -359,31 +402,47 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Dark mode script -->
     <script>
-        (function() {
-            const toggle = document.getElementById('darkModeToggle');
-            const icon = toggle.querySelector('i');
-            const body = document.body;
-            const savedMode = localStorage.getItem('darkMode');
-            if (savedMode === 'enabled') {
-                body.classList.add('dark-mode');
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
-            toggle.addEventListener('click', () => {
-                if (body.classList.contains('dark-mode')) {
-                    body.classList.remove('dark-mode');
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                    localStorage.setItem('darkMode', 'disabled');
-                } else {
-                    body.classList.add('dark-mode');
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    localStorage.setItem('darkMode', 'enabled');
-                }
-            });
-        })();
-    </script>
+(function() {
+    const toggle = document.getElementById('darkModeToggle');
+    const icon = toggle.querySelector('i');
+    const body = document.body;
+    const logo = document.getElementById('siteLogo');
+
+    const lightLogo = "{{ asset('images/logo_light.png') }}";
+    const darkLogo = "{{ asset('images/logo_dark.png') }}";
+
+    const savedMode = localStorage.getItem('darkMode');
+
+    function setLogo(isDark) {
+        logo.src = isDark ? darkLogo : lightLogo;
+    }
+
+    if (savedMode === 'enabled') {
+        body.classList.add('dark-mode');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        setLogo(true);
+    } else {
+        setLogo(false);
+    }
+
+    toggle.addEventListener('click', () => {
+        const isDark = body.classList.toggle('dark-mode');
+
+        if (isDark) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+            localStorage.setItem('darkMode', 'disabled');
+        }
+
+        setLogo(isDark);
+    });
+})();
+</script>
     @stack('scripts')
 </body>
 </html>
