@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Analyze X-ray - Lifeline')
+@section('title', 'Analyze Medical Image - Lifeline')
 
 @section('content')
 <div class="row">
@@ -15,10 +15,10 @@
             <a href="{{ route('settings') }}" class="btn btn-sm btn-outline-light">Buy More</a>
         </div>
 
-        <!-- CARD -->
+        <!-- UPLOAD CARD -->
         <div class="card p-4 shadow-sm">
-            <h3 class="fw-bold mb-3">AI X-ray Analysis</h3>
-            <p class=" small">Upload a medical image and enter patient details to generate AI‑assisted insights.</p>
+            <h3 class="fw-bold mb-3">Medical Image Analysis</h3>
+            <p class="text-muted small">Upload a medical image and enter patient details to generate AI‑assisted insights.</p>
 
             <form id="analyzeForm" enctype="multipart/form-data">
                 @csrf
@@ -30,7 +30,7 @@
                            placeholder="Enter patient's full name" required>
                 </div>
 
-                <!-- Upload -->
+                <!-- Upload Area -->
                 <div class="mb-4">
                     <label class="form-label fw-semibold">Upload Medical Image</label>
 
@@ -40,7 +40,7 @@
                         <div id="uploadPlaceholder">
                             <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
                             <p class="mb-1"><strong>Click to upload</strong> or drag & drop</p>
-                            <small class="">PNG, JPG (Max 10MB)</small>
+                            <small class="text-muted">PNG, JPG (Max 10MB)</small>
                         </div>
 
                         <div id="preview" style="display:none;">
@@ -55,22 +55,36 @@
             </form>
         </div>
 
-        <!-- RESULT -->
+        <!-- RESULT CARD -->
         <div id="resultContainer" class="mt-4" style="display:none;">
             <div class="card p-4 shadow-sm">
                 <h4 class="fw-bold mb-3">Analysis Result</h4>
 
-                <!-- LOADING -->
+                <!-- Loading Spinner -->
                 <div id="loading" class="text-center py-4" style="display:none;">
                     <div class="spinner-border text-primary"></div>
                     <p class="mt-2">Analyzing image...</p>
                 </div>
 
-                <!-- ERROR -->
+                <!-- Error -->
                 <div id="errorBox"></div>
 
-                <!-- RESULT -->
-                <div id="resultContent" class="text-secondary"></div>
+                <!-- Result Content -->
+                <div id="resultContent" class="text-secondary">
+                    <div class="result-box">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <span class="badge bg-primary mb-2" id="trackingBadge">Tracking ID: —</span>
+                                <h6 class="fw-bold mb-0" id="patientDisplay">Patient: —</h6>
+                            </div>
+                            <span class="confidence-badge" id="confidenceBadge">
+                                <i class="fas fa-shield-alt"></i> Confidence: —%
+                            </span>
+                        </div>
+                        <h6 class="fw-bold text-brand mb-2">Medical Summary</h6>
+                        <div class="summary-text table-responsive" id="summaryText"></div>
+                    </div>
+                </div>
 
                 <div class="alert alert-warning mt-4 small">
                     <i class="fas fa-exclamation-triangle me-2"></i>
@@ -141,6 +155,23 @@ body.dark-mode .upload-area:hover {
 .result-box strong {
     color: #0c4a6e;
 }
+.result-box table {
+    background: white;
+    border-radius: 0.35rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom: 1rem;
+}
+body.dark-mode .result-box {
+    background: #1e293b;
+    color: #e2e8f0;
+}
+body.dark-mode .result-box strong {
+    color: #7dd3fc;
+}
+body.dark-mode .result-box table {
+    background: #0f172a;
+}
 .confidence-badge {
     background: linear-gradient(135deg, #059669, #10b981);
     color: white;
@@ -183,19 +214,22 @@ const placeholder = document.getElementById('uploadPlaceholder');
 const patientNameInput = document.getElementById('patientName');
 
 const form = document.getElementById('analyzeForm');
-const resultBox = document.getElementById('resultContainer');
+const resultContainer = document.getElementById('resultContainer');
 const resultContent = document.getElementById('resultContent');
 const errorBox = document.getElementById('errorBox');
 const loading = document.getElementById('loading');
 const btn = document.getElementById('submitBtn');
 const creditSpan = document.getElementById('creditCount');
 
+const trackingBadge = document.getElementById('trackingBadge');
+const patientDisplay = document.getElementById('patientDisplay');
+const confidenceBadge = document.getElementById('confidenceBadge');
+const summaryText = document.getElementById('summaryText');
+
 let file = null;
 
-// Click upload
 uploadArea.onclick = () => fileInput.click();
 
-// File select
 fileInput.onchange = (e) => {
     file = e.target.files[0];
     if (!file) return;
@@ -208,7 +242,6 @@ fileInput.onchange = (e) => {
     reader.readAsDataURL(file);
 };
 
-// Submit
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -221,9 +254,9 @@ form.addEventListener('submit', async (e) => {
     formData.append('image', file);
     formData.append('patient_name', patientNameInput.value.trim());
 
-    resultBox.style.display = 'block';
+    resultContainer.style.display = 'block';
     loading.style.display = 'block';
-    resultContent.innerHTML = '';
+    resultContent.style.display = 'none';
     errorBox.innerHTML = '';
 
     btn.disabled = true;
@@ -260,7 +293,6 @@ form.addEventListener('submit', async (e) => {
     btn.innerHTML = `<i class="fas fa-microscope me-2"></i>Analyze Image`;
 });
 
-// Show error
 function showError(message) {
     errorBox.innerHTML = `
         <div class="alert alert-danger">
@@ -270,39 +302,22 @@ function showError(message) {
     `;
 }
 
-// Display result
 function displayResult(data) {
-    let summary = data.summary || "No summary returned";
-    let confidence = data.confidence ?? "N/A";
-    let trackingId = data.tracking_id ?? "—";
-    let patientName = data.patient_name || "Not provided";
+    const summary = data.summary || "No summary returned";
+    const confidence = data.confidence ?? "N/A";
+    const trackingId = data.tracking_id ?? "—";
+    const patientName = data.patient_name || "Not provided";
 
-    const formattedSummary = formatMedicalSummary(summary);
+    trackingBadge.textContent = `Tracking ID: ${trackingId}`;
+    patientDisplay.textContent = `Patient: ${patientName}`;
+    confidenceBadge.innerHTML = `<i class="fas fa-shield-alt"></i> Confidence: ${confidence}%`;
 
-    resultContent.innerHTML = `
-        <div class="result-box">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-                <div>
-                    <span class="badge bg-primary mb-2">Tracking ID: ${trackingId}</span>
-                    <h6 class="fw-bold mb-0">Patient: ${patientName}</h6>
-                </div>
-                <span class="confidence-badge">
-                    <i class="fas fa-shield-alt"></i> Confidence: ${confidence}%
-                </span>
-            </div>
-            <h6 class="fw-bold text-brand mb-2">Medical Summary</h6>
-            <div class="summary-text">${formattedSummary}</div>
-        </div>
-    `;
+    summaryText.innerHTML = formatMedicalSummary(summary);
+
+    resultContent.style.display = 'block';
 }
 
-/**
- * Converts AI-generated markdown-like text into clean, professional HTML.
- * Handles: ### / #### headings, **bold**, *italic*, - list, paragraphs.
- */
-/**
- * Converts Markdown-like text (###, ####, **bold**, *italic*, - list, | table) into clean HTML.
- */
+// ── Markdown → clean HTML (same robust version) ──
 function formatMedicalSummary(text) {
     if (!text) return '';
     const lines = text.split('\n');
@@ -311,50 +326,57 @@ function formatMedicalSummary(text) {
     let tableRows = [];
     let inTable = false;
 
+    const flushTable = () => {
+        if (tableRows.length) {
+            html += buildTable(tableRows);
+            tableRows = [];
+        }
+        inTable = false;
+    };
+
+    const isSep = (line) => {
+        const cleaned = line.replace(/[|\s\-:]/g, '');
+        return cleaned === '' && /[-:]/.test(line);
+    };
+
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i].trim();
 
-        // ---- Table detection ----
         if (line.startsWith('|') && line.endsWith('|')) {
-            // Collect rows, skip the separator row (contains --- or :--- etc.)
-            if (/^\|[\s\-:]+\|$/.test(line.replace(/\|/g, '').trim() + '|')) {
-                // This is the separator row – skip it but mark we're in a table
+            if (isSep(line)) {
                 inTable = true;
                 continue;
             } else {
-                // It's a data row or header row
-                if (!inTable && tableRows.length === 0) {
-                    // first row will be header
-                    inTable = true;
-                }
+                if (!inTable && tableRows.length === 0) inTable = true;
                 tableRows.push(line);
                 continue;
             }
-        } else {
-            // End of table (non-table line encountered)
-            if (inTable && tableRows.length > 0) {
-                html += buildTable(tableRows);
-                tableRows = [];
-                inTable = false;
-            }
-            // fall through to normal processing
         }
 
-        // ---- Normal formatting ----
+        if (isSep(line) && !/^(-{3,}|\*{3,}|_{3,})$/.test(line)) {
+            if (tableRows.length > 0 || inTable) {
+                inTable = true;
+                continue;
+            }
+            continue;
+        }
+
+        if (inTable || tableRows.length) flushTable();
+
         if (line === '') {
             if (inList) { html += '</ul>'; inList = false; }
             continue;
         }
 
-        // headings (###, ####)
-        if (/^#{3,4}\s+(.*)/.test(line)) {
+        if (/^(-{3,}|\*{3,}|_{3,})$/.test(line)) continue;
+
+        if (/^#{2,4}\s+(.*)/.test(line)) {
             if (inList) { html += '</ul>'; inList = false; }
-            const headingText = line.replace(/^#{3,4}\s+/, '');
+            const headingText = line.replace(/^#{2,4}\s+/, '');
             html += `<h5>${parseInline(headingText)}</h5>`;
             continue;
         }
 
-        // unordered list
         if (/^-\s+(.*)/.test(line)) {
             if (!inList) { html += '<ul>'; inList = true; }
             const itemText = line.replace(/^-\s+/, '');
@@ -362,23 +384,19 @@ function formatMedicalSummary(text) {
             continue;
         }
 
-        // normal paragraph
         if (inList) { html += '</ul>'; inList = false; }
         html += `<p>${parseInline(line)}</p>`;
     }
 
-    // Close any open list or table at end of text
-    if (inList) { html += '</ul>'; }
-    if (inTable && tableRows.length > 0) {
-        html += buildTable(tableRows);
-    }
+    if (inList) html += '</ul>';
+    flushTable();
 
     return html;
 }
 
 function parseInline(str) {
-    str = str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');   // bold
-    str = str.replace(/\*(.+?)\*/g, '<em>$1</em>');               // italic
+    str = str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    str = str.replace(/\*(.+?)\*/g, '<em>$1</em>');
     return str;
 }
 
@@ -401,15 +419,6 @@ function buildTable(rows) {
     }
     tableHtml += '</tbody></table>';
     return tableHtml;
-}
-
-/**
- * Handles **bold** and *italic* within a text fragment.
- */
-function parseInline(str) {
-    str = str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');   // bold
-    str = str.replace(/\*(.+?)\*/g, '<em>$1</em>');               // italic
-    return str;
 }
 </script>
 @endpush

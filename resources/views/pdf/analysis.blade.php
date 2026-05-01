@@ -12,6 +12,9 @@
         h3 { color: #0ea5e9; margin-top: 25px; margin-bottom: 10px; }
         ul { padding-left: 20px; }
         li { margin-bottom: 4px; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th { background-color: #f0f9ff; padding: 8px; text-align: left; }
+        td { padding: 6px; vertical-align: top; }
         .disclaimer { margin-top: 30px; font-size: 10px; color: gray; border-top: 1px solid #ccc; padding-top: 10px; }
     </style>
 </head>
@@ -24,31 +27,47 @@
     $tableRows = [];
     $inTable = false;
 
+    // Flush pending table
+    $flushTable = function() use (&$formatted, &$tableRows, &$inTable) {
+        if (count($tableRows)) {
+            $formatted .= buildTableHTML($tableRows);
+            $tableRows = [];
+        }
+        $inTable = false;
+    };
+
+    // Check if a line is only separator characters (dashes, colons, spaces, pipes)
+    $isSeparator = function ($line) {
+        $cleaned = preg_replace('/[|\s\-:]/', '', $line);
+        return $cleaned === '' && preg_match('/[-:]/', $line);
+    };
+
     foreach ($lines as $line) {
         $line = trim($line);
 
-        // Table detection
+        // ---- Table detection ----
         if (str_starts_with($line, '|') && str_ends_with($line, '|')) {
-            // Check if separator row (only dashes, colons, spaces, pipes)
-            $stripped = preg_replace('/[|\s\-:]+/', '', $line);
-            if ($stripped === '') {
-                // Separator row – skip but mark we are in a table
+            if ($isSeparator($line)) {
                 $inTable = true;
                 continue;
             } else {
-                // Header or data row
-                if (!$inTable && empty($tableRows)) {
-                    $inTable = true;
-                }
+                if (!$inTable && empty($tableRows)) $inTable = true;
                 $tableRows[] = $line;
                 continue;
             }
-        } else {
-            if ($inTable && !empty($tableRows)) {
-                $formatted .= buildTableHTML($tableRows);
-                $tableRows = [];
-                $inTable = false;
+        }
+        // Plain dash line (without pipes) could be a separator if we're already in a table
+        if ($isSeparator($line) && !preg_match('/^(-{3,}|\*{3,}|_{3,})$/', $line)) {
+            if ($inTable || !empty($tableRows)) {
+                $inTable = true;
+                continue;
             }
+            continue;
+        }
+
+        // Non-table line → flush pending table
+        if ($inTable || !empty($tableRows)) {
+            $flushTable();
         }
 
         // ---- Normal markdown ----
@@ -57,8 +76,11 @@
             continue;
         }
 
-        // Headings (### or ####)
-        if (preg_match('/^#{3,4}\s+(.*)/', $line, $m)) {
+        // Remove horizontal rules (---, ***, ___)
+        if (preg_match('/^(-{3,}|\*{3,}|_{3,})$/', $line)) continue;
+
+        // Headings (##, ###, ####)
+        if (preg_match('/^#{2,4}\s+(.*)/', $line, $m)) {
             if ($inList) { $formatted .= '</ul>'; $inList = false; }
             $text = e($m[1]);
             $text = preg_replace('/\*\*(.+?)\*\*/s', '<strong>$1</strong>', $text);
@@ -87,42 +109,41 @@
 
     // Close remaining list or table
     if ($inList) { $formatted .= '</ul>'; }
-    if ($inTable && !empty($tableRows)) {
-        $formatted .= buildTableHTML($tableRows);
+    if ($inTable || !empty($tableRows)) {
+        $flushTable();
     }
 
-    // Helper function for PDF table
-   function buildTableHTML($rows) {
-    if (empty($rows)) return '';
-    $html = '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse; width:100%; margin:15px 0;">';
-    $header = array_shift($rows);
-    $cells = array_map('trim', array_filter(explode('|', $header), fn($c) => $c !== ''));
+    // Helper function for PDF table (with bold/italic support)
+    function buildTableHTML($rows) {
+        if (empty($rows)) return '';
+        $html = '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse; width:100%; margin:15px 0;">';
+        $header = array_shift($rows);
+        $cells = array_map('trim', array_filter(explode('|', $header), fn($c) => $c !== ''));
 
-    // Helper to apply bold/italic inside a pre-escaped string
-    $formatCell = function($text) {
-        $text = htmlspecialchars($text);
-        $text = preg_replace('/\*\*(.+?)\*\*/s', '<strong>$1</strong>', $text);
-        $text = preg_replace('/\*(.+?)\*/s', '<em>$1</em>', $text);
-        return $text;
-    };
+        $formatCell = function($text) {
+            $text = htmlspecialchars($text);
+            $text = preg_replace('/\*\*(.+?)\*\*/s', '<strong>$1</strong>', $text);
+            $text = preg_replace('/\*(.+?)\*/s', '<em>$1</em>', $text);
+            return $text;
+        };
 
-    $html .= '<thead><tr>';
-    foreach ($cells as $cell) {
-        $html .= '<th style="background-color:#f0f9ff; padding:8px;">' . $formatCell($cell) . '</th>';
-    }
-    $html .= '</tr></thead><tbody>';
-
-    foreach ($rows as $row) {
-        $cells = array_map('trim', array_filter(explode('|', $row), fn($c) => $c !== ''));
-        $html .= '<tr>';
+        $html .= '<thead><tr>';
         foreach ($cells as $cell) {
-            $html .= '<td style="padding:6px;">' . $formatCell($cell) . '</td>';
+            $html .= '<th style="background-color:#f0f9ff; padding:8px;">' . $formatCell($cell) . '</th>';
         }
-        $html .= '</tr>';
+        $html .= '</tr></thead><tbody>';
+
+        foreach ($rows as $row) {
+            $cells = array_map('trim', array_filter(explode('|', $row), fn($c) => $c !== ''));
+            $html .= '<tr>';
+            foreach ($cells as $cell) {
+                $html .= '<td style="padding:6px;">' . $formatCell($cell) . '</td>';
+            }
+            $html .= '</tr>';
+        }
+        $html .= '</tbody></table>';
+        return $html;
     }
-    $html .= '</tbody></table>';
-    return $html;
-}
 @endphp
 
 <div class="header">

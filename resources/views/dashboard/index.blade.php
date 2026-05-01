@@ -231,6 +231,23 @@
     body.dark-mode .modal-body .text-brand {
         color: var(--brand) !important;
     }
+
+    /* Modal table styling */
+    .modal-body table {
+        background: white;
+        border-radius: 0.35rem;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        margin: 1rem 0;
+    }
+    body.dark-mode .modal-body table {
+        background: #0f172a;
+        color: #e2e8f0;
+    }
+    .modal-body table th,
+    .modal-body table td {
+        vertical-align: top;
+    }
 </style>
 @endpush
 
@@ -256,7 +273,7 @@ $(document).ready(function () {
     $('.dataTables_filter input').addClass('form-control form-control-sm');
 });
 
-// ── Delete button handler ──
+// ── Delete button ──
 document.addEventListener('click', function (e) {
     const deleteBtn = e.target.closest('.delete-analysis');
     if (!deleteBtn) return;
@@ -276,7 +293,6 @@ document.addEventListener('click', function (e) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Remove row from DataTable
             const table = $('#analysesTable').DataTable();
             table.row(row).remove().draw(false);
         } else {
@@ -327,27 +343,77 @@ document.addEventListener('click', function (e) {
         });
 });
 
-// ── Markdown to clean HTML (now also handles *italic*) ──
+// ── Markdown → clean HTML (now with robust table separator handling) ──
 function formatMedicalSummary(text) {
     if (!text) return '';
     const lines = text.split('\n');
     let html = '';
     let inList = false;
+    let tableRows = [];
+    let inTable = false;
+
+    const flushTable = () => {
+        if (tableRows.length) {
+            html += buildTable(tableRows);
+            tableRows = [];
+        }
+        inTable = false;
+    };
+
+    // Check if a line is a separator (only dashes, colons, spaces, pipes)
+    const isSep = (line) => {
+        const cleaned = line.replace(/[|\s\-:]/g, '');
+        return cleaned === '' && /[-:]/.test(line);   // at least one dash or colon
+    };
 
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i].trim();
+
+        // ---- Table detection ----
+        // If line starts and ends with |, it's definitely a table row
+        if (line.startsWith('|') && line.endsWith('|')) {
+            if (isSep(line)) {
+                inTable = true;       // separator row – skip but mark we're in a table
+                continue;
+            } else {
+                if (!inTable && tableRows.length === 0) inTable = true;
+                tableRows.push(line);
+                continue;
+            }
+        }
+
+        // Handle plain dash lines (e.g., "-------------------")
+        if (isSep(line) && !/^(-{3,}|\*{3,}|_{3,})$/.test(line)) {
+            // If we already have table rows, this separates header from body – skip it
+            if (tableRows.length > 0 || inTable) {
+                inTable = true;   // continue table mode
+                continue;
+            }
+            // If it's the first line and looks like a separator, ignore it
+            continue;
+        }
+
+        // Non-table line – flush any pending table
+        if (inTable || tableRows.length) flushTable();
+
+        // ---- Normal formatting ----
         if (line === '') {
             if (inList) { html += '</ul>'; inList = false; }
             continue;
         }
 
-        if (/^#{3,4}\s+(.*)/.test(line)) {
+        // Remove horizontal rules (---, ***, ___)
+        if (/^(-{3,}|\*{3,}|_{3,})$/.test(line)) continue;
+
+        // Headings (##, ###, ####)
+        if (/^#{2,4}\s+(.*)/.test(line)) {
             if (inList) { html += '</ul>'; inList = false; }
-            const headingText = line.replace(/^#{3,4}\s+/, '');
+            const headingText = line.replace(/^#{2,4}\s+/, '');
             html += `<h5>${parseInline(headingText)}</h5>`;
             continue;
         }
 
+        // Unordered list
         if (/^-\s+(.*)/.test(line)) {
             if (!inList) { html += '<ul>'; inList = true; }
             const itemText = line.replace(/^-\s+/, '');
@@ -355,18 +421,43 @@ function formatMedicalSummary(text) {
             continue;
         }
 
+        // Normal paragraph
         if (inList) { html += '</ul>'; inList = false; }
         html += `<p>${parseInline(line)}</p>`;
     }
 
-    if (inList) { html += '</ul>'; }
+    // Flush remaining list/table
+    if (inList) html += '</ul>';
+    flushTable();
+
     return html;
 }
 
 function parseInline(str) {
-    str = str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    str = str.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    str = str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');   // bold
+    str = str.replace(/\*(.+?)\*/g, '<em>$1</em>');               // italic
     return str;
+}
+
+function buildTable(rows) {
+    if (rows.length === 0) return '';
+    let tableHtml = '<table class="table table-bordered table-sm my-3"><thead><tr>';
+    const headerCells = rows[0].split('|').filter(cell => cell.trim() !== '');
+    headerCells.forEach(cell => {
+        tableHtml += `<th>${parseInline(cell.trim())}</th>`;
+    });
+    tableHtml += '</tr></thead><tbody>';
+
+    for (let i = 1; i < rows.length; i++) {
+        const cells = rows[i].split('|').filter(cell => cell.trim() !== '');
+        tableHtml += '<tr>';
+        cells.forEach(cell => {
+            tableHtml += `<td>${parseInline(cell.trim())}</td>`;
+        });
+        tableHtml += '</tr>';
+    }
+    tableHtml += '</tbody></table>';
+    return tableHtml;
 }
 </script>
 @endpush
